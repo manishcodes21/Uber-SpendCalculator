@@ -3,6 +3,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const summary = document.getElementById("summary");
   const fetchButton = document.getElementById("fetch-trips");
 
+ 
+  function formatDate(dateString) {
+    const dateRegex = /(\d{1,2}) (\w{3}) (\d{4})/; // Matches '10 Dec 2024'
+    const months = {
+      Jan: "01",
+      Feb: "02",
+      Mar: "03",
+      Apr: "04",
+      May: "05",
+      Jun: "06",
+      Jul: "07",
+      Aug: "08",
+      Sep: "09",
+      Oct: "10",
+      Nov: "11",
+      Dec: "12",
+    };
+
+  
+    const dateMatch = dateString.match(dateRegex);
+    if (!dateMatch) return dateString;
+
+    const day = dateMatch[1];
+    const month = months[dateMatch[2]];
+    const year = dateMatch[3];
+
+    return `${month}/${day}/${year}`; 
+  }
+
   fetchButton.addEventListener("click", () => {
     tripList.innerHTML = "";
     summary.textContent = "Loading trips...";
@@ -18,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       console.log("Received trips:", response, trips);
 
-      
+     
       const validTrips = trips.filter((trip) => trip.status !== "CANCELED");
 
       const totalTrips = validTrips.length;
@@ -28,33 +57,35 @@ document.addEventListener("DOMContentLoaded", () => {
         return sum + fare;
       }, 0);
 
-
+     
       summary.textContent = `Total Trips: ${totalTrips}, Total Fare: ₹${totalFare.toFixed(
         2
       )}`;
 
-      // Display valid trips
+     
       validTrips.forEach((trip) => {
         const listItem = document.createElement("li");
         listItem.classList.add("trip-card"); 
         listItem.innerHTML = `
           <p><strong>Trip UUID:</strong> ${trip.tripUUID}</p>
-          <p><strong>Begin Time:</strong> ${trip.beginTime}</p>
-          <p><strong>Dropoff Time:</strong> ${trip.dropoffTime}</p>
+          <p><strong>Begin Time:</strong> ${formatDate(trip.beginTime)}</p>
+          <p><strong>Dropoff Time:</strong> ${formatDate(trip.dropoffTime)}</p>
           <p><strong>Fare:</strong> ${trip.fare}</p>
           <p><strong>Distance:</strong> ${trip.distance}</p>
           <p><strong>Duration:</strong> ${trip.duration}</p>
           <p><strong>Starting Location:</strong> ${trip.startingLocation}</p>
           <p><strong>Drop Location:</strong> ${trip.dropLocation}</p>
-          <p><strong>Status:</strong> ${trip.status}</p>
+          <p><strong>Status:</strong> ${trip.status}</p>;
         `;
         tripList.appendChild(listItem);
       });
 
-      
+
       if (validTrips.length === 0) {
         summary.textContent = "No valid trips found.";
       }
     });
   });
 });
+
+
