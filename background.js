@@ -229,6 +229,7 @@ async function fetchTripDetails( csrfToken, tripUUID) {
       startingLocation: trip.waypoints[0] || "Unknown",
       dropLocation: trip.waypoints[trip.waypoints.length - 1] || "Unknown",
       cityID: trip.cityID,
+      status:trip.status
     };
 
    
