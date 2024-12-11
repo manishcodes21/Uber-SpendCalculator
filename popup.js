@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
  
   function formatDate(dateString) {
-    const dateRegex = /(\d{1,2}) (\w{3}) (\d{4})/; // Matches '10 Dec 2024'
+    const dateRegex = /(\d{1,2}) (\w{3}) (\d{4})/; 
     const months = {
       Jan: "01",
       Feb: "02",
